@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <title>Googlemaps Heatmap Layer</title>
+    <style>
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map-canvas { height: 100% }
+      h1 { position:absolute; }
+    </style>
+    
+    <script type="application/javascript">
+        var ws = null;
+
+
+        function connect() {
+            //alert("In Connect !!!");
+            var target = 'ws://' + window.location.host + "/tak/echo";
+
+            if ('WebSocket' in window) {
+                ws = new WebSocket(target);
+            } else if ('MozWebSocket' in window) {
+                ws = new MozWebSocket(target);
+            } else {
+                alert('WebSocket is not supported by this browser.');
+                return;
+            }
+            ws.onopen = function () {
+              //  alert('Info: WebSocket connection opened.');
+            };
+            ws.onmessage = function (event) {
+               console.log('Received: ' + event.data);
+               var str = JSON.parse(event.data);
+            //   str = event.data;
+            //   loc = str.split(":");
+           //    addLocation(parseFloat(loc[0]),parseFloat(loc[1]))
+                 addLocation(str.latitude,str.longitude);
+            };
+            ws.onclose = function (event) {
+                //setConnected(false);
+                alert('Info: WebSocket connection closed, Code: ' + event.code + (event.reason == "" ? "" : ", Reason: " + event.reason));
+            };
+        }
+
+        function disconnect() {
+            if (ws != null) {
+                ws.close();
+                ws = null;
+            }
+        }
+        
+        function addLocation(lt,lg){
+     	   
+    	    heatmap.addData({lat: lt, lng:lg, count: 1});
+    	       
+    	   }
+
+        function echo() {
+        
+        	//alert('Hi');
+            if (ws != null) {
+                var message = document.getElementById('keyword').value;
+                document.getElementById("searchbtn").disabled = true; 
+               // log('Sent: ' + message);
+                ws.send(message);
+            } else {
+                alert('WebSocket connection not established, please connect.');
+            }
+        }
+
+        function clear() {
+			alert('In Clear!!!!');
+			heatmap.clear();
+			heatmap.setData({data:[]});
+        }
+        
+        function stop() {
+            
+        	//alert('Hi');
+        	document.getElementById("searchbtn").disabled = false; 
+            if (ws != null) {
+               // log('Sent: ' + message);
+                ws.send('kjsdbkldnvksnxkcvnl');
+            } else {
+                alert('WebSocket connection not established, please connect.');
+            }
+        }
+        
+
+        
+        
+
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Remove elements with "noscript" class - <noscript> is not allowed in XHTML
+            var noscripts = document.getElementsByClassName("noscript");
+            for (var i = 0; i < noscripts.length; i++) {
+                noscripts[i].parentNode.removeChild(noscripts[i]);
+            }
+        }, false);
+        
+        
+    </script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script src="heatmap.js"></script>
+    <script src="gmaps-heatmap.js"></script>
+
+  </head>
+  <body onload="connect()" onunload="stop()">
+    <div>
+    <input type="text" placeholder="Search..." id ="keyword" value='search' required></input>
+    <button onclick="echo()" id='searchbtn'>Search</button> 
+    <button onclick="stop()">Stop</button> 
+    <button onclick="heatmap.setData(testData);">Clear</button> 
+    </div>
+
+    <div id="map-canvas"></div>
+    
+    <script>
+        // map center
+        var myLatlng = new google.maps.LatLng(25.6586, -80.3568);
+        // map options,
+        var myOptions = {
+          zoom: 3,
+          center: myLatlng
+        };
+        // standard map
+        map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+        // heatmap layer
+        heatmap = new HeatmapOverlay(map, 
+          {
+            // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+            "radius": 2,
+            "maxOpacity": 1, 
+            // scales the radius based on map zoom
+            "scaleRadius": true, 
+            // if set to false the heatmap uses the global maximum for colorization
+            // if activated: uses the data maximum within the current map boundaries 
+            //   (there will always be a red spot with useLocalExtremas true)
+            "useLocalExtrema": true,
+            // which field name in your data represents the latitude - default "lat"
+            latField: 'lat',
+            // which field name in your data represents the longitude - default "lng"
+            lngField: 'lng',
+            // which field name in your data represents the data value - default "value"
+            valueField: 'count'
+          }
+        );
+
+         testData = {
+          max: 8,
+          data: [{}]
+        };
+
+         heatmap.setData(testData);
+		
+		
+
+</script>
+  </body>
+</html>
