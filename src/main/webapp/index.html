@@ -14,7 +14,7 @@
             <button type="button" onclick="closeSocket();" >Stop</button>
             <label id="lblAverageScore">Sentiment Score</label>
         </div>
-        <div id="map" style="width: 1845px; height: 950px;"></div>
+        <div id="map" style="width: 1845px; height: 600px;"></div>
         
         <!-- Server responses get written here -->
         <div id="messages"></div>
@@ -22,7 +22,7 @@
         <script type="text/javascript">
                        
             var webSocket;
-            var target = 'ws://' + window.location.host + "/TwitterAnalysis/echo";
+            var target = 'ws://' + window.location.host + "/tak/echo";
             var messages = document.getElementById("messages");
             
             function openSocket()
