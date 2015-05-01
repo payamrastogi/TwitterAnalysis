@@ -29,10 +29,10 @@ public final class TweetGet
     	//just fill this
     	 ConfigurationBuilder cb = new ConfigurationBuilder();
          cb.setDebugEnabled(true)
-           .setOAuthConsumerKey("3FfsKyHKlDWOmpwP57ECPIioY")
-           .setOAuthConsumerSecret("dV3ZomRgR255MVlOptOTrJqa6zl9oEpbZDR0c0Cggn9qQM665g")
-           .setOAuthAccessToken("39455623-3OplCdYC436UyjjQU6nCBiDL2IlaPwY0ATqtjrpEm")
-           .setOAuthAccessTokenSecret("HtXvx6zuZzDAODVXVYTfnzoNpDAJwQoLueFhMNZIPHWlw");
+           .setOAuthConsumerKey("T9pnFkuq0GTNav4ByYNPZIsNx")
+           .setOAuthConsumerSecret("dthVi84DZKzIUnxkhfIAlgmHIA7EAKyWbSCK5C0yfE0s0Jkkum")
+           .setOAuthAccessToken("39455623-CykQ5gFjdW4eTLVrCCFOQTFA6JTRRK6Bwi1ioXugJ")
+           .setOAuthAccessTokenSecret("XR9XcwCWSHyrozLBZA2g2VJwghcw2Hl5JOuiReP4wvuoi");
         TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
         
         StatusListener listener = new StatusListener() 
